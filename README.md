@@ -26,3 +26,54 @@ A Spring Boot–based personal expense tracker
 - IntelliJ warned about deprecated `.csrf().disable()` style — fixed it using lambda-based config
 - Learned about `SecurityFilterChain` bean
 
+## 📅 Day 1: Database Design & DTO Implementation
+
+### ✅ Objectives Completed
+
+- Finalized entity classes: `Expense` and `Category`
+- Established proper JPA relationships:
+  - `@OneToMany` and `@ManyToOne` between `Category` and `Expense`
+- Designed and implemented the `CategoryDto` class for clean data transfer
+- Followed real-life software engineering practices:
+  - Thoughtful database-first approach
+  - Proper entity encapsulation
+  - Added validation with annotations like `@NotBlank` and `@Size`
+
+---
+
+### 🧩 Entity Relationship Overview
+
+**Category**
+- `id` (Primary Key)
+- `name` (Unique, Not Null)
+- One-to-Many relationship with `Expense`
+
+**Expense**
+- `id` (Primary Key)
+- `amount`, `description`, `date` (Not Null)
+- Many-to-One relationship with `Category`
+
+---
+
+### 🛠️ Technologies Used
+
+- **Spring Boot** (Entity & Configuration Management)
+- **Lombok** for cleaner models
+- **JPA / Hibernate** for ORM
+- **H2 Database** (In-memory DB for local testing)
+- **Jakarta Validation** annotations for input validation
+
+---
+
+### 📁 Project Structure
+
+```plaintext
+src/
+├── main/
+│   ├── java/
+│   │   └── com/expense/tracker/
+│   │       ├── model/
+│   │       │   ├── Category.java
+│   │       │   └── Expense.java
+│   │       └── dto/
+│   │           └── CategoryDto.java
