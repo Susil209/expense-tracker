@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
@@ -22,4 +23,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     // Custom query to get total expenses by category ID
     @Query("SELECT Sum(e.amount) FROM Expense e WHERE e.category.id = ?1")
     BigDecimal getTotalAmountByCategoryId(Long categoryId);
+
+    Optional<BigDecimal> getTotalExpensesByCategoryId(Long categoryId);
 }

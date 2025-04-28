@@ -1,11 +1,15 @@
 package com.expense.tracker.config;
 
 import com.expense.tracker.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,46 +18,37 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Bean
-    protected  SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf(AbstractHttpConfigurer::disable)               // for API testing
+                .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // H2 console
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/h2-console/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(Customizer.withDefaults()) // uses the default login page
-                .csrf(csrf -> csrf.disable())         // disable CSRF
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // allow H2 console to render
+                .httpBasic(Customizer.withDefaults())        // <= enable Basic Auth
+//                .formLogin(Customizer.withDefaults())        // keep form login if you like
                 .build();
-
-        // or
-
-//        return http
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/test", "/h2-console/**").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .formLogin(Customizer.withDefaults()) // uses the default login page
-//                .csrf(AbstractHttpConfigurer::disable)         // disable CSRF
-//                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // allow H2 console to render
-//                .build();
-//
     }
 
     @Bean
-    protected UserDetailsService userDetailsService(PasswordEncoder passwordEncoder){
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User
-                .withUsername("admin")
-                .password(passwordEncoder.encode("password"))
-                .roles("ADMIN").build());
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        // Tell it to use your UserService + BCrypt
+        provider.setUserDetailsService(userService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
-        return manager;
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return userService;
     }
 
     @Bean
@@ -61,3 +56,5 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
+
