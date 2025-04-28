@@ -77,3 +77,63 @@ src/
 │   │       │   └── Expense.java
 │   │       └── dto/
 │   │           └── CategoryDto.java
+
+
+# 📄 Expense Tracker Backend — Updates Summary
+
+This document tracks the incremental work done after the last commit.
+
+---
+
+## 🗓️ Day 2 — API Implementation & Security Setup
+
+- Implemented **ExpenseController** with full CRUD endpoints.
+- Integrated **Spring Security**:
+  - Set up `SecurityConfig` with Basic Authentication.
+  - Initialized default admin user in the database using `DataLoader`.
+  - Implemented `UserService` for database authentication.
+- Resolved API access authentication issues using Postman Basic Auth.
+
+---
+
+## 🗓️ Day 3 — Error Handling & Client-Side Response Structuring
+
+- Refactored controller methods to return a consistent **ApiResponse** format.
+- Added centralized `@ExceptionHandler` for `ResponseStatusException`.
+- Improved client-side (Postman) visibility for success and error messages.
+- Integrated server-side logging with **SLF4J Logger**.
+
+---
+
+## 🗓️ Day 4 — Code Quality & Testing
+
+- Verified all API endpoints manually via Postman.
+- Resolved Hibernate identifier issues during update operations.
+- Cleaned and standardized all responses.
+- Prepared the backend for future enhancements: Testing, Documentation, CI/CD setup.
+
+---
+
+## 🚀 Next Steps (Planned)
+
+- Add **Unit Tests** and **Integration Tests**.
+- Enhance **Swagger/OpenAPI** documentation.
+- Implement **Pagination and Filtering** for listing APIs.
+- Set up **Dockerization** and CI/CD pipelines.
+- Integrate **Spring Boot Actuator** for health monitoring.
+
+---
+
+## 📌 Notes
+
+- Database: **H2 In-Memory Database**.
+- Authentication: **Spring Security** (Default user: `admin` / password: `password`).
+- Tech Stack:
+  - Spring Boot 3
+  - Spring Data JPA
+  - Lombok
+  - ModelMapper
+  - Swagger (OpenAPI 3)
+
+---
+
