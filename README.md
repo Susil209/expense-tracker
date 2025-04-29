@@ -77,7 +77,7 @@ src/
 │   │       │   └── Expense.java
 │   │       └── dto/
 │   │           └── CategoryDto.java
-
+```
 
 # 📄 Expense Tracker Backend — Updates Summary
 
