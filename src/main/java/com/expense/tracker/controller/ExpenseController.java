@@ -71,7 +71,7 @@ public class ExpenseController {
         log.debug("Found {} expenses", expenses.size());
 
         ResponseWrapper<List<ExpenseDto>> body = new ResponseWrapper<>(
-                "Expenses retrieved successfully,", expenses
+                "Expenses retrieved successfully", expenses
         );
 
         return ResponseEntity.ok(body);
